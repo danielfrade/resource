@@ -5,14 +5,15 @@
     Monitora CPU, memória, disco e processos. Usa análise preditiva simples para sugerir ações
     e implementa soluções automaticamente após aprovação do usuário. Gera relatório HTML.
 .AUTHOR
- Daniel Vocurca Frade
+    Daniel Vocurca Frade
 .DATE
     13 de Março de 2025
 #>
 
-# Verifica se está rodando como administrador
+# Verifica e força execução como administrador
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Warning "Este script requer privilégios de administrador para algumas ações. Por favor, execute como administrador."
+    Write-Host "Reiniciando como administrador..." -ForegroundColor Yellow
+    Start-Process powershell -Verb RunAs -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Wait
     exit
 }
 
@@ -38,7 +39,7 @@ function Get-AsciiGraph {
     }
 }
 
-# Função de análise preditiva simples (corrigida)
+# Função de análise preditiva simples
 function Get-PredictiveAnalysis {
     param (
         [double]$CurrentValue,
@@ -73,7 +74,8 @@ function New-HtmlReport {
     </html>
 "@
     try {
-        $htmlTemplate | Out-File -FilePath $LogPath -Encoding UTF8
+        $htmlTemplate | Out-File -FilePath $LogPath -Encoding UTF8 -Force
+        Write-Host "Relatório gerado em: $LogPath" -ForegroundColor Green
     }
     catch {
         Write-Error "Erro ao salvar relatório: $_"
@@ -186,7 +188,6 @@ else {
 
 # Gerar relatório final
 New-HtmlReport -Content $reportContent
-Write-Host "Relatório gerado em: $LogPath" -ForegroundColor Green
 
 # Abrir relatório automaticamente
 try {
