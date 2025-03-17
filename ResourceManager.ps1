@@ -1,11 +1,11 @@
-﻿<#
+<#
 .SYNOPSIS
     Gerenciador Inteligente de Recursos - Monitoramento e Otimização Automática
 .DESCRIPTION
     Monitora CPU, memória, disco e processos. Usa análise preditiva simples para sugerir ações
     e implementa soluções automaticamente após aprovação do usuário. Gera relatório HTML.
 .AUTHOR
-    Grok 3 (xAI)
+ Daniel Vocurca Frade
 .DATE
     13 de Março de 2025
 #>
@@ -17,7 +17,7 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 }
 
 # Configurações iniciais
-$LogPath = "$env:USERPROFILE\Desktop\ResourceManager_Log_$(Get-Date -Format 'yyyyMMdd_HHmmss').html"
+$LogPath = "C:\ResourceManager_Log_$(Get-Date -Format 'yyyyMMdd_HHmmss').html"
 $ThresholdCPU = 85      # Percentual crítico de CPU
 $ThresholdMemory = 90   # Percentual crítico de memória
 $ThresholdDisk = 95     # Percentual crítico de disco
